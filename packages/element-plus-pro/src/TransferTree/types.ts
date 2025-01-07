@@ -4,6 +4,12 @@ export interface TreeNode {
   children?: TreeNode[]
 }
 
+export interface TransferTreeLocale {
+  sourceList?: string
+  targetList?: string
+  filterPlaceholder?: string
+}
+
 export interface TransferTreeProps {
   width?: string
   height?: string

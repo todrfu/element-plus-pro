@@ -1,11 +1,11 @@
-# Transfer Tree 组件
+# TransferTree Component
 
-基于 [element-tree-transfer-pro](https://github.com/Herozzq/element-tree-transfer-pro) 组件库，
-使用文档参考：[element-tree-transfer-pro](https://github.com/Herozzq/element-tree-transfer-pro)
+Based on [element-tree-transfer-pro](https://github.com/Herozzq/element-tree-transfer-pro) component library.
+For usage documentation, refer to: [element-tree-transfer-pro](https://github.com/Herozzq/element-tree-transfer-pro)
 
-## 基础用法
+## Basic Usage
 
-:::preview 基础用法 || 展示组件的基本使用方法
+:::preview Basic Usage || Demonstrates basic component usage
 
 demo-preview=./demos/transfer-tree/basic.vue
 

@@ -1,26 +1,28 @@
 # Element Plus Pro
 
-`Element Plus Pro` 是为集合 `Element Plus` 扩展组件的库。
+`Element Plus Pro` is a library that provides extended components for `Element Plus`.
+
+Unstable version, not recommended for production use.
 
 + [![Release](https://github.com/todrfu/element-plus-pro/actions/workflows/release.yml/badge.svg)](https://github.com/todrfu/element-plus-pro/actions/workflows/release.yml)
 + [![Deploy Docs](https://github.com/todrfu/element-plus-pro/actions/workflows/docs.yml/badge.svg)](https://github.com/todrfu/element-plus-pro/actions/workflows/docs.yml)
 
-## 安装
+## Installation
 
 ```bash
 pnpm add @todrfu/element-plus-pro
 ```
 
-## 文档
+## Documentation
 
-访问 [Element Plus Pro 文档](https://todrfu.github.io/element-plus-pro/) 了解更多信息。
+Visit [Element Plus Pro Documentation](https://todrfu.github.io/element-plus-pro/) for more information.
 
-## 开发
+## Development
 
 ```bash
-# 组件开发
+# Component development
 pnpm run epp:dev
 
-# 文档开发
+# Documentation development
 pnpm run docs:dev
 ```

@@ -1,18 +1,24 @@
 import type { App } from 'vue'
 import { TransferTree } from './components'
+import Locale from './locale'
 
-// 导出组件
+export { useLocale, setLocale } from './locale'
+export type { Language } from './locale'
+
+export const installLocale = (app: App, options = {}) => {
+  app.use(Locale, options)
+}
+
 export { TransferTree }
+export type { TreeNode, TransferTreeProps } from './components'
 
-// 导出类型
-export type {
-  TreeNode,
-  TransferTreeProps
-} from './components'
+export const installComponent = (app: App) => {
+  app.component('TransferTree', TransferTree)
+}
 
-// 导出 Vue 插件
 export default {
-  install: (app: App) => {
-    app.component('TransferTree', TransferTree)
+  install: (app: App, options: { locale?: string } = {}) => {
+    installLocale(app, options)
+    installComponent(app)
   }
 } 

@@ -1,6 +1,6 @@
 <template>
   <div class="transfer-box" :style="{ width, height }">
-    <!-- 左侧树框 -->
+    <!-- Left tree box -->
     <div class="transfer-left">
       <div class="transfer-title">
         <el-checkbox
@@ -18,16 +18,15 @@
         <el-input
           v-if="filterable"
           clearable
-          size="small"
           class="filter-input"
-          :placeholder="filterPlaceholder"
+          :placeholder="filterPlaceholderText"
           v-model="filterTree"
         >
           <template #prefix>
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
-        <!-- 左侧树 -->
+        <!-- Left tree -->
         <el-tree
           show-checkbox
           ref="fromTreeRef"
@@ -49,7 +48,7 @@
         </div>
       </div>
     </div>
-    <!-- 穿梭区 按钮框 -->
+    <!-- Transfer area button box -->
     <div class="transfer-center">
       <el-button
         size="small"
@@ -70,9 +69,8 @@
         <span v-if="leftButtonText">{{ leftButtonText }}</span>
         <el-icon v-else><ArrowLeft /></el-icon>
       </el-button>
-
     </div>
-    <!-- 右侧列表区 -->
+    <!-- Right list area -->
     <div class="transfer-right">
       <div class="transfer-title">
         <el-checkbox
@@ -89,16 +87,15 @@
         <el-input
           v-if="filterable"
           clearable
-          :placeholder="filterPlaceholder"
+          :placeholder="filterPlaceholderText"
           v-model="filterList"
-          size="small"
           class="filter-input"
         >
           <template #prefix>
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
-        <!-- 右侧列表 -->
+        <!-- Right list -->
         <el-checkbox-group
           v-model="listCheckKey"
           class="el-transfer-panel__list flex flex-col"
@@ -121,60 +118,69 @@
 
 <script lang="ts" setup>
 /**
- * 基于 element-tree-transfer-pro
- * 使用文档参考：https://github.com/Herozzq/element-tree-transfer-pro
+ * Based on element-tree-transfer-pro
+ * Documentation reference: https://github.com/Herozzq/element-tree-transfer-pro
  */
 import { ElTree } from "element-plus";
-import { ArrowRight, ArrowLeft, Search } from '@element-plus/icons-vue'
+import { ArrowRight, ArrowLeft, Search } from "@element-plus/icons-vue";
 import { ref, watch, computed, nextTick } from "vue";
 import type { CheckboxValueType } from "element-plus";
-import type { TransferTreeProps, TreeNode } from './types'
+import type { TransferTreeProps, TreeNode } from "./types";
+import { useLocale } from "../locale";
+
+const { t } = useLocale();
 
 defineOptions({
-  name: 'TransferTree',
-})
+  name: "TransferTree",
+});
 
 const props = withDefaults(defineProps<TransferTreeProps>(), {
-  width: '800px',
-  height: '500px',
-  titles: () => ['源数据', '目标列表'],
+  width: "100%",
+  height: "400px",
+  titles: () => [],
   dataSource: () => [],
-  defaultProps: () => ({ label: 'label', children: 'children' }),
-  nodeKey: 'id',
+  defaultProps: () => ({ label: "label", children: "children" }),
+  nodeKey: "id",
   filterable: false,
   openAll: true,
   defaultCheckedKeys: () => [],
   defaultExpandedKeys: () => [],
-  filterPlaceholder: '请输入搜索内容',
+  filterPlaceholder: "",
   accordion: false,
   renderAfterExpand: true,
   expandOnClickNode: true,
   fatherChoose: false,
   isRadio: false,
   buttonTexts: () => [],
-  listSortFifo: true
-})
+  listSortFifo: true,
+});
 
 const emit = defineEmits(["right-check-change", "left-check-change", "change"]);
 
-const treeKeys = ref<string[]>([]); //树所有节点的key
-const treeLength = ref(0); // 树所有节点数量
-const treeIndeterminate = ref(false); // 源数据是否半选
-const treeCheckAll = ref(false); // 源数据是否全选
-const treeExpandedKeys = ref<string[]>([]); // 源数据展开节点
-const treeCheckKeys = ref<string[]>([]); // 源数据选中key数组 以此属性关联穿梭按钮，总全选、半选状态
-const filterTree = ref(""); // 源数据筛选
-const filterList = ref(""); // 右侧数据筛选
-const archiveFirst = ref<TreeNode[]>([]); // 存档右侧筛选前数据
-const rightList = ref<TreeNode[]>([]); //右侧数据列表
-const listCheckKey = ref<string[]>([]); //右选中数据
-const listCheckAll = ref(false); // 右侧列表是否全选
+const treeKeys = ref<string[]>([]); // All node keys of the tree
+const treeLength = ref(0); // Total number of tree nodes
+const treeIndeterminate = ref(false); // Whether source data is in indeterminate state
+const treeCheckAll = ref(false); // Whether source data is all checked
+const treeExpandedKeys = ref<string[]>([]); // Expanded nodes in source data
+const treeCheckKeys = ref<string[]>([]); // Selected key array of source data, controls transfer button and overall check state
+const filterTree = ref(""); // Source data filter
+const filterList = ref(""); // Right side data filter
+const archiveFirst = ref<TreeNode[]>([]); // Archive pre-filtered right side data
+const rightList = ref<TreeNode[]>([]); // Right side data list
+const listCheckKey = ref<string[]>([]); // Right selected data
+const listCheckAll = ref(false); // Whether right list is all checked
 const fromTreeRef = ref<InstanceType<typeof ElTree>>();
 // const treeFromData = computed(() => cloneDeep(props.dataSource))
 const treeFromData = ref<TreeNode[]>([]);
 
-const treeTitle = computed(() => props.titles[0]);
-const listTitle = computed(() => props.titles[1]);
+const treeTitle = computed(
+  () => props.titles[0] || t("el.transfer.sourceList")
+);
+
+const listTitle = computed(
+  () => props.titles[1] || t("el.transfer.targetList")
+);
+
 const leftButtonText = computed(() => props.buttonTexts[0]);
 const rightButtonText = computed(() => props.buttonTexts[1]);
 const listIndeterminate = computed(
@@ -374,6 +380,9 @@ watch(
   { immediate: true }
 );
 
+/**
+ * from tree checked
+ */
 const fromTreeChecked = (nodeObj: { id: string }) => {
   treeCheckKeys.value = fromTreeRef.value?.getCheckedKeys(
     !props.fatherChoose
@@ -393,6 +402,9 @@ const fromTreeChecked = (nodeObj: { id: string }) => {
   });
 };
 
+/**
+ * tree all box change
+ */
 const treeAllBoxChange = (val: CheckboxValueType) => {
   if (treeFromData.value.length == 0) {
     return;
@@ -408,11 +420,17 @@ const treeAllBoxChange = (val: CheckboxValueType) => {
   emit("left-check-change", treeCheckKeys.value);
 };
 
+/**
+ * filter node from
+ */
 const filterNodeFrom = (value: string, data: Record<string, any>) => {
   if (!value) return true;
   return data[props.defaultProps.label].indexOf(value) !== -1;
 };
 
+/**
+ * transfer tree to list
+ */
 const treeToList = () => {
   let arrayCheckedNodes =
     fromTreeRef.value?.getCheckedNodes(!props.fatherChoose) || [];
@@ -448,6 +466,9 @@ const treeToList = () => {
   emit("change", treeCheckKeys.value, "right", movedKeys);
 };
 
+/**
+ * list all box change
+ */
 const listAllBoxChange = (val: CheckboxValueType) => {
   if (val) {
     listCheckKey.value = rightList.value.map((item) => item[props.nodeKey]);
@@ -456,12 +477,18 @@ const listAllBoxChange = (val: CheckboxValueType) => {
   }
 };
 
+/**
+ * update list all checked
+ */
 const updateListAllChecked = () => {
   const keys = rightList.value.map((item) => item[props.nodeKey]);
   listCheckAll.value =
     keys.length > 0 && keys.every((item) => listCheckKey.value.includes(item));
 };
 
+/**
+ * transfer right list to left tree
+ */
 const listToTree = () => {
   const movedKeys = [...new Set(treeCheckKeys.value)].filter((item) =>
     new Set(listCheckKey.value).has(item)
@@ -483,13 +510,19 @@ const listToTree = () => {
   setChecked(treeCheckKeys.value);
   emit("change", treeCheckKeys.value, "left", movedKeys);
 };
+
+/**
+ * filter input placeholder
+ */
+const filterPlaceholderText = computed(
+  () => props.filterPlaceholder || t("el.transfer.filterPlaceholder")
+);
 </script>
 
 <style lang="scss" scoped>
 $elNamespace: "el";
 
 .transfer-box {
-  width: 100% !important;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -509,6 +542,9 @@ $elNamespace: "el";
 .#{$elNamespace}-tree {
   min-width: 100%;
   display: inline-block !important;
+  &-node__label {
+    font-size: 12px;
+  }
 }
 
 .transfer-main {
@@ -565,14 +601,8 @@ $elNamespace: "el";
   padding-left: 6px;
 }
 
-.filter-input .#{$elNamespace}-input__inner {
-  margin-bottom: 10px;
-  height: 32px;
-  width: 100%;
-  font-size: 12px;
-  display: inline-block;
-  box-sizing: border-box;
-  border-radius: 16px;
+.filter-input {
+  margin-bottom: 4px;
 }
 
 .#{$elNamespace}-input__icon {

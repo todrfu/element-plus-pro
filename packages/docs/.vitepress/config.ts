@@ -1,47 +1,63 @@
-import { defineConfig } from 'vitepress'
-import { containerPreview, componentPreview } from '@vitepress-demo-preview/plugin'
+import { defineConfig } from "vitepress";
+import {
+  containerPreview,
+  componentPreview,
+} from "@vitepress-demo-preview/plugin";
+import { zhConfig, enConfig } from "./locales";
 
 export default defineConfig({
-  title: 'Element Plus Pro',
-  description: '基于 Element Plus 的扩展组件库',
-  base: '/element-plus-pro/',
+  title: "Element Plus Pro",
+  description: "Extension Component Library Based on Element Plus",
+  base: "/element-plus-pro/",
+
+  locales: {
+    root: {
+      label: "English",
+      lang: "en",
+      ...enConfig,
+    },
+    zh: {
+      label: "中文",
+      lang: "zh",
+      ...zhConfig,
+    },
+  },
+
   themeConfig: {
     nav: [
-      { text: '指南', link: '/guide/' },
-      { text: '组件', link: '/components/' }
+      { text: "Guide", link: "/guide/" },
+      { text: "Components", link: "/components/" },
     ],
     sidebar: {
-      '/guide/': [
+      "/guide/": [
         {
-          text: '指南',
+          text: "Guide",
           items: [
-            { text: '介绍', link: '/guide/' },
-            { text: '快速开始', link: '/guide/getting-started' }
-          ]
-        }
+            { text: "Introduction", link: "/guide/" },
+            { text: "Getting Started", link: "/guide/getting-started" },
+          ],
+        },
       ],
-      '/components/': [
+      "/components/": [
         {
-          text: '数据传输',
-          items: [
-            { text: 'TransferTree 树形穿梭框', link: '/components/transfer-tree' }
-          ]
+          text: "Data Transfer",
+          items: [{ text: "TransferTree", link: "/components/transfer-tree" }],
         },
         {
-          text: '表单组件',
-          items: []
+          text: "Form Components",
+          items: [],
         },
         {
-          text: '数据展示',
-          items: []
-        }
-      ]
-    }
+          text: "Data Display",
+          items: [],
+        },
+      ],
+    },
   },
   markdown: {
     config(md) {
-      md.use(containerPreview)
-      md.use(componentPreview)
-    }
-  }
-}) 
+      md.use(containerPreview);
+      md.use(componentPreview);
+    },
+  },
+});
