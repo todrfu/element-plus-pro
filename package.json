@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "epp:dev": "pnpm -C packages/element-plus-pro dev",
+    "epp:test": "pnpm -C packages/element-plus-pro test",
     "epp:build": "pnpm -C packages/element-plus-pro build",
     "docs:dev": "pnpm -C packages/docs dev",
     "docs:build": "pnpm -C packages/docs build",

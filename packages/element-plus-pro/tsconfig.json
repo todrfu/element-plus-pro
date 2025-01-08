@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "downlevelIteration": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "types": ["vitest/globals", "vitest/importMeta"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ]
+} 

@@ -1,6 +1,6 @@
 <template>
   <div class="transfer-box" :style="{ width, height }">
-    <!-- Left tree box -->
+    <!-- Left panel -->
     <div class="transfer-left">
       <div class="transfer-title">
         <el-checkbox
@@ -26,7 +26,7 @@
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
-        <!-- Left tree -->
+        <!-- Tree component -->
         <el-tree
           show-checkbox
           ref="fromTreeRef"
@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <!-- Transfer area button box -->
+    <!-- Transfer operation buttons -->
     <div class="transfer-center">
       <el-button
         size="small"
@@ -70,7 +70,7 @@
         <el-icon v-else><ArrowLeft /></el-icon>
       </el-button>
     </div>
-    <!-- Right list area -->
+    <!-- Right panel -->
     <div class="transfer-right">
       <div class="transfer-title">
         <el-checkbox
@@ -95,14 +95,14 @@
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
-        <!-- Right list -->
+        <!-- List component -->
         <el-checkbox-group
           v-model="listCheckKey"
           class="el-transfer-panel__list flex flex-col"
         >
           <el-checkbox
             v-for="item of rightList"
-            :label="item[nodeKey]"
+            :value="item[nodeKey]"
             :key="item[nodeKey]"
           >
             {{ item[defaultProps.label] }}
@@ -188,15 +188,14 @@ const listIndeterminate = computed(
     listCheckKey.value.length > 0 &&
     listCheckKey.value.length < rightList.value.length
 );
+
+// 是否禁用转移按钮
 const transferDisabled = computed(() => {
   const rightKeys = rightList.value.map((item) => item[props.nodeKey]);
-  let result =
-    treeCheckKeys.value.length > 0 &&
-    treeCheckKeys.value.every((item) => rightKeys.includes(item));
-  if (rightKeys.length === 0 && treeCheckKeys.value.length === 0) {
-    result = true;
+  if (treeCheckKeys.value.length === 0) {
+    return true;
   }
-  return result;
+  return treeCheckKeys.value.every((item) => rightKeys.includes(item));
 });
 
 const setChecked = (leftKeys: string[] = []) => {
@@ -306,6 +305,12 @@ watch(
     if (val && val.length > 0) {
       setTreeMsg(deepClone(val) as TreeNode[]);
       treeFromData.value = deepClone(val) as TreeNode[];
+      if (props.defaultCheckedKeys.length > 0) {
+        nextTick(() => {
+          fromTreeRef.value?.setCheckedKeys(props.defaultCheckedKeys);
+          treeCheckKeys.value = props.defaultCheckedKeys;
+        });
+      }
     }
   },
   {
@@ -368,6 +373,9 @@ watch(
       chooseDisable(treeCheckKeys.value, treeFromData.value);
     }
     treeFromData.value = [...treeFromData.value];
+    nextTick(() => {
+      fromTreeRef.value?.setCheckedKeys(val);
+    });
   }
 );
 
@@ -381,9 +389,16 @@ watch(
 );
 
 /**
- * from tree checked
+ * Handle tree node check event
  */
 const fromTreeChecked = (nodeObj: { id: string }) => {
+  // Prevent transfer if parent node is selected in radio mode
+  if (props.isRadio && nodeObj[props.defaultProps.children]?.length > 0) {
+    setChecked([]);
+    treeCheckKeys.value = [];
+    return;
+  }
+
   treeCheckKeys.value = fromTreeRef.value?.getCheckedKeys(
     !props.fatherChoose
   ) as string[];
@@ -403,7 +418,7 @@ const fromTreeChecked = (nodeObj: { id: string }) => {
 };
 
 /**
- * tree all box change
+ * Handle tree select all checkbox change
  */
 const treeAllBoxChange = (val: CheckboxValueType) => {
   if (treeFromData.value.length == 0) {
@@ -421,7 +436,7 @@ const treeAllBoxChange = (val: CheckboxValueType) => {
 };
 
 /**
- * filter node from
+ * Filter tree nodes
  */
 const filterNodeFrom = (value: string, data: Record<string, any>) => {
   if (!value) return true;
@@ -429,11 +444,21 @@ const filterNodeFrom = (value: string, data: Record<string, any>) => {
 };
 
 /**
- * transfer tree to list
+ * Transfer selected nodes from tree to list
  */
 const treeToList = () => {
   let arrayCheckedNodes =
     fromTreeRef.value?.getCheckedNodes(!props.fatherChoose) || [];
+  if (props.isRadio) {
+    // In radio mode, if parent node is selected, cancel selection
+    const hasChildren = arrayCheckedNodes.some(node => 
+      node[props.defaultProps.children]?.length > 0
+    );
+    if (hasChildren) {
+      return;
+    }
+  }
+
   let rightKeys = JSON.parse(
     JSON.stringify(rightList.value.map((item) => item[props.nodeKey]))
   );
@@ -467,7 +492,7 @@ const treeToList = () => {
 };
 
 /**
- * list all box change
+ * Handle list select all checkbox change
  */
 const listAllBoxChange = (val: CheckboxValueType) => {
   if (val) {
@@ -478,7 +503,7 @@ const listAllBoxChange = (val: CheckboxValueType) => {
 };
 
 /**
- * update list all checked
+ * Update list select all checkbox state
  */
 const updateListAllChecked = () => {
   const keys = rightList.value.map((item) => item[props.nodeKey]);
@@ -487,7 +512,7 @@ const updateListAllChecked = () => {
 };
 
 /**
- * transfer right list to left tree
+ * Transfer selected items from list back to tree
  */
 const listToTree = () => {
   const movedKeys = [...new Set(treeCheckKeys.value)].filter((item) =>
@@ -512,7 +537,7 @@ const listToTree = () => {
 };
 
 /**
- * filter input placeholder
+ * Filter input placeholder text
  */
 const filterPlaceholderText = computed(
   () => props.filterPlaceholder || t("el.transfer.filterPlaceholder")
