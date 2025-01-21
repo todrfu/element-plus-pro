@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { TransferTree } from '@todrfu/element-plus-pro'
+import { TransferTree } from '@otdrfu/element-plus-pro'
 
 const data = ref([
   {

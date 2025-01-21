@@ -4,13 +4,13 @@
 
 ```bash
 # npm
-npm install @todrfu/element-plus-pro
+npm install @otdrfu/element-plus-pro
 
 # yarn
-yarn add @todrfu/element-plus-pro
+yarn add @otdrfu/element-plus-pro
 
 # pnpm
-pnpm add @todrfu/element-plus-pro
+pnpm add @otdrfu/element-plus-pro
 ```
 
 ## Basic Usage
@@ -48,7 +48,7 @@ app.use(app => {
 
 ```vue
 <script setup>
-import { TransferTree } from '@todrfu/element-plus-pro'
+import { TransferTree } from '@otdrfu/element-plus-pro'
 </script>
 
 <template>

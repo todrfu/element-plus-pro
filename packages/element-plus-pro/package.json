@@ -1,6 +1,6 @@
 {
-  "name": "@todrfu/element-plus-pro",
-  "version": "0.1.0-alpha.1",
+  "name": "@otdrfu/element-plus-pro",
+  "version": "0.0.1",
   "private": false,
   "publishConfig": {
     "access": "public",

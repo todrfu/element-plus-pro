@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@todrfu/element-plus-pro-docs"]
+  "ignore": ["@otdrfu/element-plus-pro-docs"]
 } 

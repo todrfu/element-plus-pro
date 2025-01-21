@@ -10,7 +10,7 @@ Unstable version, not recommended for production use.
 ## Installation
 
 ```bash
-pnpm add @todrfu/element-plus-pro
+pnpm add @otdrfu/element-plus-pro
 ```
 
 ## Documentation

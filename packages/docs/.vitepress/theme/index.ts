@@ -8,8 +8,8 @@ import "@vitepress-demo-preview/component/dist/style.css";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 
-import ElementPlusPro, { setLocale } from "@todrfu/element-plus-pro";
-import "@todrfu/element-plus-pro/dist/style.css";
+import ElementPlusPro, { setLocale } from "@otdrfu/element-plus-pro";
+import "@otdrfu/element-plus-pro/dist/style.css";
 
 // switch locale when route change
 const setupLocale = () => {

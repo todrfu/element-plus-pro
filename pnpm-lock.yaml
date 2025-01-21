@@ -20,7 +20,7 @@ importers:
 
   packages/docs:
     dependencies:
-      '@todrfu/element-plus-pro':
+      '@otdrfu/element-plus-pro':
         specifier: workspace:*
         version: link:../element-plus-pro
       '@vitepress-demo-preview/component':

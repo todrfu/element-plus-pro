@@ -1,5 +1,5 @@
 {
-  "name": "@todrfu/element-plus-pro-docs",
+  "name": "@otdrfu/element-plus-pro-docs",
   "version": "0.1.0-alpha.1",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "serve": "vitepress serve"
   },
   "dependencies": {
-    "@todrfu/element-plus-pro": "workspace:*",
+    "@otdrfu/element-plus-pro": "workspace:*",
     "@vitepress-demo-preview/component": "^2.3.2",
     "@vitepress-demo-preview/plugin": "^1.2.3",
     "element-plus": "^2.5.3",
