@@ -3,10 +3,13 @@ name: Deploy Docs
 on:
   push:
     branches:
-      - main
+      - gp-pages
     paths:
       - 'packages/docs/**'
       - 'packages/element-plus-pro/src/**'
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
