@@ -1,6 +1,6 @@
 # 组件概览
 
-Element Plus Pro 提供以下扩展组件
+Element Plus Pro 提供以下扩展组件：
 
 ## 数据穿梭
 

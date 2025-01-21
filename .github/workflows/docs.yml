@@ -8,6 +8,9 @@ on:
       - 'packages/docs/**'
       - 'packages/element-plus-pro/src/**'
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
