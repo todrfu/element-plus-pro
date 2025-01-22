@@ -37,7 +37,7 @@ jobs:
       - name: Build Package
         run: pnpm epp:build
 
-      - name: Create Release Pull Request or Publish
+      - name: Publish
         id: changesets
         uses: changesets/action@v1
         with:
